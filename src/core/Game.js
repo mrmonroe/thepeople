@@ -35,7 +35,7 @@ export default class Game extends Phaser.Scene {
 
     const playerSprite = this.physics.add.sprite(0, 0, 'player');
     playerSprite.setDepth(2);
-    this.cameras.main.setBounds(0, 0, basicGrassMap.widthInPixels, basicGrassMap.heightInPixels);
+    //this.cameras.main.setBounds(0, 0, basicGrassMap.widthInPixels, basicGrassMap.heightInPixels);
     this.cameras.main.startFollow(playerSprite);
     const player = new Player(playerSprite, 5, 8, 8);
 

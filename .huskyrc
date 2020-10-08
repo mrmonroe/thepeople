@@ -1,7 +1,0 @@
-"husky": {
-    "hooks": {
-      "pre-commit": "eslint src --fix",
-      "pre-push": "eslint src --fix",
-      
-    }
-}
