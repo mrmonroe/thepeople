@@ -68,7 +68,7 @@ export default class Player {
   }
 
   isCurrentFrameStanding(direction) {
-    return this.sprite.frame.name !== this.framesOfDirection(direction).standing;
+    return this.sprite.frame.name != this.framesOfDirection(direction).standing;
   }
 
   framesOfDirection(direction) {
