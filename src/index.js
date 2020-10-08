@@ -1,32 +1,38 @@
-import Phaser from "phaser";
-import logoImg from "./assets/logo.png";
+import Phaser from 'phaser';
+import Game from './core/Game';
 
-const config = {
-  type: Phaser.AUTO,
-  parent: "phaser-example",
-  width: 800,
-  height: 600,
-  scene: {
-    preload: preload,
-    create: create
-  }
+const CANVAS_WIDTH = 720;
+const CANVAS_HEIGHT = 528;
+
+const sceneConfig = {
+  active: false,
+  visible: false,
+  key: 'Game',
 };
 
-const game = new Phaser.Game(config);
+const first = new Game(sceneConfig);
 
-function preload() {
-  this.load.image("logo", logoImg);
-}
+const gameConfig = {
+  title: 'The People',
+  render: {
+    antialias: false,
+  },
+  type: Phaser.AUTO,
+  parent: 'game',
+  scene: first,
+  scale: {
+    width: CANVAS_WIDTH,
+    height: CANVAS_HEIGHT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 0 },
+      debug: true,
+    },
+  },
+  backgroundColor: '#000',
+};
 
-function create() {
-  const logo = this.add.image(400, 150, "logo");
-
-  this.tweens.add({
-    targets: logo,
-    y: 450,
-    duration: 2000,
-    ease: "Power2",
-    yoyo: true,
-    loop: -1
-  });
-}
+export const game = new Phaser.Game(gameConfig);
