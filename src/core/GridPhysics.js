@@ -1,5 +1,5 @@
-import Phaser from 'phaser';
-import config from './config/Config';
+import Phaser from "phaser";
+import config from "./config/Config";
 
 export default class GridPhysics {
   constructor(player, tileMap) {
@@ -19,7 +19,9 @@ export default class GridPhysics {
   }
 
   movePlayer(direction) {
-    if (this.isMoving()) { return; }
+    if (this.isMoving()) {
+      return;
+    }
     if (this.isBlockingDirection(direction)) {
       this.player.setStandingFrame(direction);
     } else {
@@ -43,10 +45,10 @@ export default class GridPhysics {
 
   updatePlayerPosition(delta) {
     this.decimalPlacesLeft = this.getDecimalPlaces(
-      this.getSpeedPerDelta(delta) + this.decimalPlacesLeft,
+      this.getSpeedPerDelta(delta) + this.decimalPlacesLeft
     );
     const pixelsToWalkThisUpdate = this.getIntegerPart(
-      this.getSpeedPerDelta(delta) + this.decimalPlacesLeft,
+      this.getSpeedPerDelta(delta) + this.decimalPlacesLeft
     );
 
     if (this.willCrossTileBorderThisUpdate(pixelsToWalkThisUpdate)) {
@@ -114,7 +116,9 @@ export default class GridPhysics {
   }
 
   tilePosInDirection(direction) {
-    return this.player.getTilePos().add(this.movementDirectionVectors[direction]);
+    return this.player
+      .getTilePos()
+      .add(this.movementDirectionVectors[direction]);
   }
 
   isBlockingDirection(direction) {
@@ -122,11 +126,15 @@ export default class GridPhysics {
   }
 
   hasNoTile(pos) {
-    return !this.tileMap.layers.some((layer) => this.tileMap.hasTileAt(pos.x, pos.y, layer.name));
+    return !this.tileMap.layers.some((layer) =>
+      this.tileMap.hasTileAt(pos.x, pos.y, layer.name)
+    );
   }
 
   hasBlockingTile(pos) {
-    if (this.hasNoTile(pos)) { return true; }
+    if (this.hasNoTile(pos)) {
+      return true;
+    }
     return this.tileMap.layers.some((layer) => {
       const tile = this.tileMap.getTileAt(pos.x, pos.y, false, layer.name);
       return tile && tile.properties.collides;

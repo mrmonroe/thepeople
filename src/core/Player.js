@@ -1,5 +1,5 @@
-import Phaser from 'phaser';
-import config from './config/Config';
+import Phaser from "phaser";
+import config from "./config/Config";
 
 export default class Player {
   constructor(sprite, cIndex, xPos, yPos) {
@@ -25,13 +25,15 @@ export default class Player {
     const yP = this.startTilePosY * config.TILE_SIZE + this.playerOffsetY();
     this.sprite.setPosition(xP, yP);
     this.sprite.setFrame(
-      this.framesOfDirection(config.DIRECTION.DOWN).standing,
+      this.framesOfDirection(config.DIRECTION.DOWN).standing
     );
   }
 
   getTilePos() {
-    const x = (this.sprite.getCenter().x - this.playerOffsetX()) / config.TILE_SIZE;
-    const y = (this.sprite.getCenter().y - this.playerOffsetY()) / config.TILE_SIZE;
+    const x =
+      (this.sprite.getCenter().x - this.playerOffsetX()) / config.TILE_SIZE;
+    const y =
+      (this.sprite.getCenter().y - this.playerOffsetY()) / config.TILE_SIZE;
     return new Phaser.Math.Vector2(Math.floor(x), Math.floor(y));
   }
 
@@ -56,7 +58,7 @@ export default class Player {
   setWalkingFrame(direction) {
     this.frameRow = this.framesOfDirection(direction);
     this.sprite.setFrame(
-      this.lastFootLeft ? this.frameRow.rightFoot : this.frameRow.leftFoot,
+      this.lastFootLeft ? this.frameRow.rightFoot : this.frameRow.leftFoot
     );
   }
 
@@ -68,7 +70,9 @@ export default class Player {
   }
 
   isCurrentFrameStanding(direction) {
-    return this.sprite.frame.name !== this.framesOfDirection(direction).standing;
+    return (
+      this.sprite.frame.name !== this.framesOfDirection(direction).standing
+    );
   }
 
   framesOfDirection(direction) {
@@ -76,8 +80,9 @@ export default class Player {
     const playerCol = this.characterIndex % config.CHARS_IN_ROW;
     const framesInRow = config.CHARS_IN_ROW * config.FRAMES_PER_CHAR_ROW;
     const framesInSameRowBefore = config.FRAMES_PER_CHAR_ROW * playerCol;
-    const rows = this.directionToFrameRow[direction]
-      + playerRow * config.FRAMES_PER_CHAR_COL;
+    const rows =
+      this.directionToFrameRow[direction] +
+      playerRow * config.FRAMES_PER_CHAR_COL;
     const startFrame = framesInSameRowBefore + rows * framesInRow;
     return {
       leftFoot: startFrame,

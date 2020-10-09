@@ -6,11 +6,11 @@ const config = {
   FRAMES_PER_CHAR_COL: 4,
   TILE_SIZE: 48,
   DIRECTION: {
-    NONE: 'none',
-    LEFT: 'left',
-    UP: 'up',
-    RIGHT: 'right',
-    DOWN: 'down',
+    NONE: "none",
+    LEFT: "left",
+    UP: "up",
+    RIGHT: "right",
+    DOWN: "down",
   },
 };
 

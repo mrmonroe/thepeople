@@ -1,4 +1,4 @@
-import config from './config/Config';
+import config from "./config/Config";
 
 export default class GridControls {
   constructor(input, gridPhysics) {
