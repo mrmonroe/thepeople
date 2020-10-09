@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import config from './Config';
+import config from './config/Config';
 
 export default class Player {
   constructor(sprite, cIndex, xPos, yPos) {
@@ -7,7 +7,7 @@ export default class Player {
     this.startTilePosX = xPos;
     this.startTilePosY = yPos;
     this.sprite = sprite;
-    this.sprite.scale = this.scaleFactor = 1;
+    this.sprite.scale = this.scaleFactor = 1.5;
     this.lastFootLeft = false;
     this.frameRow = {
       leftFoot: 0,

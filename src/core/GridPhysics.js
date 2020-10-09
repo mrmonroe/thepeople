@@ -1,13 +1,14 @@
 import Phaser from 'phaser';
-import config from './Config';
+import config from './config/Config';
 
 export default class GridPhysics {
-  constructor(player) {
+  constructor(player, tileMap) {
+    this.player = player;
+    this.tileMap = tileMap;
     this.movementDirection = config.DIRECTION.NONE;
     this.speedPixelsPerSecond = config.TILE_SIZE * 3;
     this.tileSizePixelsWalked = 0;
     this.decimalPlacesLeft = 0;
-    this.player = player;
 
     this.movementDirectionVectors = {
       [config.DIRECTION.UP]: Phaser.Math.Vector2.UP,
@@ -18,7 +19,10 @@ export default class GridPhysics {
   }
 
   movePlayer(direction) {
-    if (!this.isMoving()) {
+    if (this.isMoving()) { return; }
+    if (this.isBlockingDirection(direction)) {
+      this.player.setStandingFrame(direction);
+    } else {
       this.startMoving(direction);
     }
   }
@@ -107,5 +111,25 @@ export default class GridPhysics {
 
   hasWalkedHalfATile(tileSizePixelsWalked) {
     return tileSizePixelsWalked > config.TILE_SIZE / 2;
+  }
+
+  tilePosInDirection(direction) {
+    return this.player.getTilePos().add(this.movementDirectionVectors[direction]);
+  }
+
+  isBlockingDirection(direction) {
+    return this.hasBlockingTile(this.tilePosInDirection(direction));
+  }
+
+  hasNoTile(pos) {
+    return !this.tileMap.layers.some((layer) => this.tileMap.hasTileAt(pos.x, pos.y, layer.name));
+  }
+
+  hasBlockingTile(pos) {
+    if (this.hasNoTile(pos)) { return true; }
+    return this.tileMap.layers.some((layer) => {
+      const tile = this.tileMap.getTileAt(pos.x, pos.y, false, layer.name);
+      return tile && tile.properties.collides;
+    });
   }
 }

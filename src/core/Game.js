@@ -1,49 +1,52 @@
 import Phaser from 'phaser';
-import defaultPlayerImg from '../sprites/players/charsprites.png';
+import defaultPlayerImg from '../assets/sprites/players/charsprites.png';
 import GridControls from './GridControls';
 import GridPhysics from './GridPhysics';
 import Player from './Player';
-import config from './Config';
+import GameMap from './GameMap';
+import config from './config/Config';
+import mapConfig from './config/MapConfig';
 
 export default class Game extends Phaser.Scene {
   constructor(cfg) {
     super(cfg);
     this.gridControls = null;
     this.gridPhysics = null;
-    this.TILE_SIZE = 48;
+    this.newMap = null;
   }
 
   preload() {
     this.load.spritesheet('player', defaultPlayerImg, {
       frameWidth: config.PLAYER_FRAME_WIDTH,
       frameHeight: config.PLAYER_FRAME_HEIGHT,
-
     });
+    const level = 0;
+    this.newMap = new GameMap(
+      mapConfig[level].gameMap.imgKey,
+      mapConfig[level].gameMap.imgFile,
+      mapConfig[level].gameMap.mapKey,
+      mapConfig[level].gameMap.mapFile,
+      mapConfig[level].gameMap.tilesetKey,
+      this,
+    );
 
-    this.load.image('tiles', './src/assets/BaseChip_pipo.png');
-    this.load.tilemapTiledJSON('basic-grass-map', './src/assets/gamejson.json');
+    this.newMap.preload();
   }
 
   create() {
-    const basicGrassMap = this.make.tilemap({ key: 'basic-grass-map' });
-    basicGrassMap.addTilesetImage('pipo', 'tiles');
-    for (let i = 0; i < basicGrassMap.layers.length; ++i) {
-      const layer = basicGrassMap.createStaticLayer(i, 'pipo', 0, 0);
-      layer.setDepth(i);
-      layer.scale = 2.5;
-    }
-
+    this.newMap.create();
     const playerSprite = this.physics.add.sprite(0, 0, 'player');
-    playerSprite.setDepth(2);
-    //this.cameras.main.setBounds(0, 0, basicGrassMap.widthInPixels, basicGrassMap.heightInPixels);
+    playerSprite.setDepth(mapConfig[0].gameMap.playerDepth);
     this.cameras.main.startFollow(playerSprite);
-    const player = new Player(playerSprite, 5, 8, 8);
-
-    this.gridPhysics = new GridPhysics(player);
-    this.gridControls = new GridControls(
-      this.input,
-      this.gridPhysics,
+    const player = new Player(
+      playerSprite,
+      6,
+      mapConfig[0].gameMap.playerStartX,
+      mapConfig[0].gameMap.playerStartY,
     );
+
+    this.gridPhysics = new GridPhysics(player, this.newMap.tileMap);
+    this.gridControls = new GridControls(this.input, this.gridPhysics);
   }
 
   update(_time, delta) {
