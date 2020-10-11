@@ -1,3 +1,5 @@
+import config from "./config/Config";
+
 export default class GameMap {
   constructor(imgKey, imgFile, mapKey, mapFile, tilesetKey, game) {
     this.imgKey = imgKey;
@@ -20,7 +22,7 @@ export default class GameMap {
     for (let i = 0; i < this.tileMap.layers.length; ++i) {
       const layer = this.tileMap.createStaticLayer(i, this.tilesetKey, 0, 0);
       layer.setDepth(i);
-      layer.scale = 3;
+      layer.scale = 3 - config.SCALE;
     }
   }
 }

@@ -1,0 +1,66 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2.66
+        },
+        "src/assets/game.tmx": {
+            "scale": 1.0828869047619047,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 152.8322110759929,
+                "y": 160.2198708258898
+            }
+        },
+        "src/assets/gamejson.json": {
+            "scale": 1.1834,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 133.93611627513943,
+                "y": 177.87730268717257
+            }
+        },
+        "src/assets/gamejson.json#pipo": {
+            "scaleInDock": 1
+        },
+        "src/assets/map_json/greenlands_1.json#pipo": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2.66
+        }
+    },
+    "map.height": 20,
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
+    "map.lastUsedFormat": "json",
+    "map.layerDataFormat": null,
+    "map.orientation": 1,
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 20,
+    "openFiles": [
+    ],
+    "project": "tiled.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "src/assets/map_json/greenlands_1.json",
+        "src/assets/gamejson.json",
+        "src/assets/game.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.transparentColor": "#003039",
+    "tileset.type": 0,
+    "tileset.useTransparentColor": true
+}

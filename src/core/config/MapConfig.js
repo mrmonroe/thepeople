@@ -14,6 +14,19 @@ const mapConfig = [
       playerDepth: 1,
     },
   },
+  {
+    gameMap: {
+      levelName: "TestMap",
+      imgKey: "testmap-tiles",
+      imgFile: "./src/assets/maps/map_images/BaseChip_pipo.png",
+      mapKey: "testmap-map",
+      mapFile: "./src/assets/maps/map_json/gamejson.json",
+      tilesetKey: PIPO,
+      playerStartX: 8,
+      playerStartY: 8,
+      playerDepth: 2,
+    },
+  },
 ];
 
 export default mapConfig;

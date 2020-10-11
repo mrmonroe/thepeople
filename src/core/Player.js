@@ -2,11 +2,12 @@ import Phaser from "phaser";
 import config from "./config/Config";
 
 export default class Player {
-  constructor(sprite, cIndex, xPos, yPos) {
+  constructor(sprite, cIndex, xPos, yPos, scene) {
     this.characterIndex = cIndex;
     this.startTilePosX = xPos;
     this.startTilePosY = yPos;
     this.sprite = sprite;
+    this.scene = scene;
     this.sprite.scale = this.scaleFactor = 1.5;
     this.lastFootLeft = false;
     this.frameRow = {
@@ -90,4 +91,19 @@ export default class Player {
       rightFoot: startFrame + 2,
     };
   }
+
+
+  hasWonTheScene(){
+
+    this.goToNextScene()
+    
+  }
+
+  goToNextScene(){
+    this.scene.manager.stop(this.scene.key)
+    let sceneIndex = this.scene.manager.getIndex(this.scene.key)
+    let nextScene = this.scene.manager.getAt(sceneIndex + 1)
+    nextScene.scene.start(nextScene.scene.key)
+  }
+
 }

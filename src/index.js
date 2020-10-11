@@ -1,16 +1,20 @@
 import Phaser from "phaser";
 import Game from "./core/Game";
+import mapConfig from "./core/config/MapConfig"
 
-const CANVAS_WIDTH = 720;
-const CANVAS_HEIGHT = 528;
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 600;
 
-const sceneConfig = {
-  active: false,
-  visible: false,
-  key: "Game",
-};
+let scenes = []
+mapConfig.forEach((mc,i) => {
+  let sceneConfig = {
+    active: false,
+    visible: false,
+    key: mc.gameMap.levelName,
+  }
+  scenes.push(new Game(sceneConfig, i));
+})
 
-const first = new Game(sceneConfig);
 
 const gameConfig = {
   title: "The People",
@@ -19,7 +23,7 @@ const gameConfig = {
   },
   type: Phaser.AUTO,
   parent: "game",
-  scene: first,
+  scene: scenes,
   scale: {
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT,

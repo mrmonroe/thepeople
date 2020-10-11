@@ -2,11 +2,12 @@ import Phaser from "phaser";
 import config from "./config/Config";
 
 export default class GridPhysics {
-  constructor(player, tileMap) {
+  constructor(player, tileMap, cameras) {
     this.player = player;
     this.tileMap = tileMap;
+    this.cameras = cameras;
     this.movementDirection = config.DIRECTION.NONE;
-    this.speedPixelsPerSecond = config.TILE_SIZE * 3;
+    this.speedPixelsPerSecond = config.TILE_SIZE * config.SPEED.WALKING;
     this.tileSizePixelsWalked = 0;
     this.decimalPlacesLeft = 0;
 
@@ -43,6 +44,9 @@ export default class GridPhysics {
     this.movementDirection = direction;
   }
 
+  changeSpeed(speed){
+    this.speedPixelsPerSecond = config.TILE_SIZE * speed;
+  }
   updatePlayerPosition(delta) {
     this.decimalPlacesLeft = this.getDecimalPlaces(
       this.getSpeedPerDelta(delta) + this.decimalPlacesLeft
@@ -137,6 +141,9 @@ export default class GridPhysics {
     }
     return this.tileMap.layers.some((layer) => {
       const tile = this.tileMap.getTileAt(pos.x, pos.y, false, layer.name);
+      if(tile && tile.properties.isTreasure){
+        this.player.hasWonTheScene()
+      }
       return tile && tile.properties.collides;
     });
   }
