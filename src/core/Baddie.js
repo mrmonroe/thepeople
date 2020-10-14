@@ -1,11 +1,11 @@
 import Phaser from "phaser";
-import config from "./config/Config";
 import EasyStar from "easystarjs"; // A* pathfinder
+import config from "./config/Config";
 
 export default class Baddie {
   constructor(sprite, x, y, tileMap, player, tweens) {
     this.sprite = sprite;
-    this.finder = new EasyStar.js();
+    this.Finder = new EasyStar.js();
     this.tileMap = tileMap;
     this.player = player;
     this.setBaddiePosition(x, y);
@@ -14,16 +14,14 @@ export default class Baddie {
   }
 
   setBaddiePosition(x = 5, y = 10) {
-    const yOff =
-      -((config.PLAYER_FRAME_HEIGHT * config.SCALE) % config.TILE_SIZE) / 2;
+    const yOff = -((config.PLAYER_FRAME_HEIGHT * 1.5) % config.TILE_SIZE) / 2;
     const xP = x * config.TILE_SIZE + config.TILE_SIZE / 2;
     const yP = y * config.TILE_SIZE + yOff;
     this.sprite.setPosition(xP, yP);
   }
 
   getBaddieTilePos() {
-    let yOff =
-      -((config.PLAYER_FRAME_HEIGHT * config.SCALE) % config.TILE_SIZE) / 2;
+    const yOff = -((config.PLAYER_FRAME_HEIGHT * 1.5) % config.TILE_SIZE) / 2;
 
     const x =
       (this.sprite.getCenter().x - config.TILE_SIZE / 2) / config.TILE_SIZE;
@@ -33,57 +31,59 @@ export default class Baddie {
   }
 
   setFinder() {
-    let grid = [];
+    this.Finder.enableDiagonals();
+
+    const grid = [];
     for (let y = 0; y < this.tileMap.height; y++) {
-      let col = [];
+      const col = [];
       for (let x = 0; x < this.tileMap.width; x++) {
         col.push(this.getTileID(x, y));
       }
       grid.push(col);
     }
 
-    this.finder.setGrid(grid);
+    this.Finder.setGrid(grid);
 
-    let tileset = this.tileMap.tilesets[0];
+    const tileset = this.tileMap.tilesets[0];
 
-    let properties = tileset.tileProperties;
-    let acceptableTiles = [];
+    const properties = tileset.tileProperties;
+    const acceptableTiles = [];
+  
     for (let i = tileset.firstgid - 1; i < tileset.total; i++) {
       if (!properties[i].collides || !properties[i].isTreasure) {
-        let tileId = this.getTileID(
+        const tileId = this.getTileID(
           tileset.texCoordinates[i].x,
           tileset.texCoordinates[i].y
         );
-        acceptableTiles.push(tileId); //+1
-        continue;
+        acceptableTiles.push(tileId); // +1
       }
     }
 
-    this.finder.setAcceptableTiles(acceptableTiles);
+    this.Finder.setAcceptableTiles(acceptableTiles);
   }
 
   getPathToPlayer(interval = 100) {
-    //interval = 100;
-   setInterval(() => {
-     this.searchPath();
-      this.finder.calculate();
+    // interval = 100;
+    setInterval(() => {
+      try {
+        this.searchPath();
+      } catch (err) {
+        //do nothing
+      }
+      this.Finder.calculate();
     }, interval);
   }
 
   searchPath() {
-    let pos = this.player.getTilePos();
-    let badPos = this.getBaddieTilePos();
-    // console.log("ply pos: ", pos)
-    //console.log("baddie pos: ", badPos)
-    let toX = Math.floor(pos.x);
-    let toY = Math.floor(pos.y);
-    let fromX = Math.floor(badPos.x);
-    let fromY = Math.floor(badPos.y);
-
-    this.finder.findPath(fromX, fromY, toX, toY, (path) => {
-      if (path === null) {
-        return;
-      } else {
+    const pos = this.player.getTilePos();
+    const badPos = this.getBaddieTilePos();
+    const toX = Math.floor(pos.x);
+    const toY = Math.floor(pos.y);
+    const fromX = Math.floor(badPos.x);
+    const fromY = Math.floor(badPos.y);
+    // console.log(`From: (${fromX},${fromY})`, `To: (${toX},${fromY})`)
+    this.Finder.findPath(fromX, fromY, toX, toY, (path) => {
+      if (path !== null) {
         this.moveBaddie(path, (moves) => {
           if (moves && moves.length > 0) {
             this.tweens.timeline({
@@ -94,31 +94,32 @@ export default class Baddie {
       }
     });
   }
+
   getTweens() {
     return this.tweens;
   }
+
   getTileID(x, y) {
-    let tile = this.tileMap.getTileAt(x, y, true);
+    const tile = this.tileMap.getTileAt(x, y, true);
     return tile && tile.index;
   }
 
   moveBaddie(path, callback) {
-    //console.log("moveBaddie: ", path)
-    let tw = [];
-    //console.log()
+    const tween = [];
+    const duration = 500;
     for (let i = 0; i < path.length - 1; i++) {
-      let ex = path[i + 1].x;
-      let ey = path[i + 1].y;
+      const ex = path[i + 1].x;
+      const ey = path[i + 1].y;
 
-      tw.push({
+      tween.push({
         targets: this.sprite,
         props: {
-          x: { value: ex * config.TILE_SIZE, duration: 200 },
-          y: { value: ey * config.TILE_SIZE, duration: 200 },
+          x: { value: ex * config.TILE_SIZE, duration: duration },
+          y: { value: ey * config.TILE_SIZE, duration: duration },
         },
       });
     }
 
-    callback(tw);
+    callback(tween);
   }
 }

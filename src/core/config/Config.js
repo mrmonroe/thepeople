@@ -18,7 +18,6 @@ const config = {
     RIGHT: "right",
     DOWN: "down",
   },
-
 };
 
 export default config;

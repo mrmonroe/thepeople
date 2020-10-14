@@ -44,9 +44,10 @@ export default class GridPhysics {
     this.movementDirection = direction;
   }
 
-  changeSpeed(speed){
+  changeSpeed(speed) {
     this.speedPixelsPerSecond = config.TILE_SIZE * speed;
   }
+
   updatePlayerPosition(delta) {
     this.decimalPlacesLeft = this.getDecimalPlaces(
       this.getSpeedPerDelta(delta) + this.decimalPlacesLeft
@@ -141,8 +142,8 @@ export default class GridPhysics {
     }
     return this.tileMap.layers.some((layer) => {
       const tile = this.tileMap.getTileAt(pos.x, pos.y, false, layer.name);
-      if(tile && tile.properties.isTreasure){
-        this.player.hasWonTheScene()
+      if (tile && tile.properties.isTreasure) {
+        this.player.hasWonTheScene();
       }
       return tile && tile.properties.collides;
     });

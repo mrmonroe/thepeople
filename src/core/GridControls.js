@@ -7,12 +7,11 @@ export default class GridControls {
   }
 
   update() {
-    
     const cursors = this.input.keyboard.createCursorKeys();
-    //const shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+    // const shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
     if (cursors.shift.isDown) {
       this.gridPhysics.changeSpeed(config.SPEED.RUNNING);
-    }else if(cursors.shift.isUp) {
+    } else if (cursors.shift.isUp) {
       this.gridPhysics.changeSpeed(config.SPEED.WALKING);
     }
     if (cursors.left.isDown) {
@@ -23,8 +22,6 @@ export default class GridControls {
       this.gridPhysics.movePlayer(config.DIRECTION.UP);
     } else if (cursors.down.isDown) {
       this.gridPhysics.movePlayer(config.DIRECTION.DOWN);
-    } 
-    
-    
+    }
   }
 }

@@ -7,8 +7,7 @@ import Player from "./Player";
 import GameMap from "./GameMap";
 import config from "./config/Config";
 import mapConfig from "./config/MapConfig";
-import Baddie from "./Baddie";
-import EasyStar from "easystarjs"; //x
+import BaddieFactory from "./BaddieFactory";
 
 export default class Game extends Phaser.Scene {
   constructor(cfg, mapIndex) {
@@ -17,30 +16,27 @@ export default class Game extends Phaser.Scene {
     this.gridPhysics = null;
     this.newMap = null;
     this.mapIndex = mapIndex;
-    this.finder = new EasyStar.js().enableSync(); //x
     this.player = null;
     this.chinaMan = null;
-    this.baddie = null;
-
-    this.tweenTimeline = null;
-    this.timeLineShouldPlay = false;
-  }
-
-  init(){
-    //this.tweenTimeline = this.tweens.createTimeline();
-    //this.tweens.cre
+    this.baddieFactory = null;
+    this.isPlayerAlive = true;
   }
 
   preload() {
+    
     this.load.spritesheet(config.PLAYER_SPRITESHEET_KEY, defaultPlayerImg, {
       frameWidth: config.PLAYER_FRAME_WIDTH,
       frameHeight: config.PLAYER_FRAME_HEIGHT,
     });
+    this.baddieFactory = new BaddieFactory(this);
 
-    this.load.spritesheet("chinaMan", chinaMan, {
-      frameWidth: config.PLAYER_FRAME_WIDTH,
-      frameHeight: config.PLAYER_FRAME_HEIGHT,
-    });
+    this.baddieFactory.preLoadBaddies(
+      "chinaMan",
+      chinaMan,
+      config.PLAYER_FRAME_WIDTH,
+      config.PLAYER_FRAME_HEIGHT,
+      3
+    );
 
     const level = this.mapIndex;
     this.newMap = new GameMap(
@@ -51,16 +47,13 @@ export default class Game extends Phaser.Scene {
       mapConfig[level].gameMap.tilesetKey,
       this
     );
-    
+
     this.newMap.preload();
   }
 
   create() {
     this.newMap.create();
-    this.chinaMan = this.physics.add.sprite(0, 0, "chinaMan");
-    this.chinaMan.setDepth(2);
-    this.chinaMan.scale = 1.5;
-    this.chinaMan.setPosition(5, 10)
+    this.baddieFactory.generateSprites(0, 1.5)
     const playerSprite = this.physics.add.sprite(
       3,
       3,
@@ -78,29 +71,56 @@ export default class Game extends Phaser.Scene {
       mapConfig[this.mapIndex].gameMap.playerStartY,
       this.scene
     );
-    this.baddie = new Baddie(
-      this.chinaMan,
-      10,
-      10,
+    this.baddieFactory.createBaddies(
       this.newMap.tileMap,
       this.player,
       this.scene.scene.tweens
     );
-    this.baddie.setFinder();
-    this.baddie.getPathToPlayer(800);
+   
+    this.baddieFactory.startBaddies(1500);
     this.gridPhysics = new GridPhysics(
       this.player,
       this.newMap.tileMap,
       this.cameras
     );
     this.gridControls = new GridControls(this.input, this.gridPhysics);
-    
+    this.isPlayerAlive = true;
   }
 
   update(_time, delta) {
+    if (!this.isPlayerAlive) {
+      return;
+    }
+    this.baddieFactory.handleGroupCollide()
+    this.baddieFactory.getGroup().forEach((baddie) => {
+      if (
+        Phaser.Geom.Intersects.RectangleToRectangle(
+          this.player.sprite.getBounds(),
+
+          baddie.sprite.getBounds()
+        )
+      ) {
+        this.isPlayerAlive = false;
+        this.cameras.main.shake(500, 0.02);
+        this.time.delayedCall(
+          500,
+          () => {
+            this.cameras.main.fade(250);
+          },
+          [],
+          this
+        );
+        this.time.delayedCall(
+          500,
+          () => {
+            this.scene.restart();
+          },
+          [],
+          this
+        );
+      }
+    });
     this.gridControls.update();
     this.gridPhysics.update(delta);
-
-
   }
 }

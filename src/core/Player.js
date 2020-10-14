@@ -92,18 +92,14 @@ export default class Player {
     };
   }
 
-
-  hasWonTheScene(){
-
-    this.goToNextScene()
-    
+  hasWonTheScene() {
+    this.goToNextScene();
   }
 
-  goToNextScene(){
-    this.scene.manager.stop(this.scene.key)
-    let sceneIndex = this.scene.manager.getIndex(this.scene.key)
-    let nextScene = this.scene.manager.getAt(sceneIndex + 1)
-    nextScene.scene.start(nextScene.scene.key)
+  goToNextScene() {
+    this.scene.manager.stop(this.scene.key);
+    const sceneIndex = this.scene.manager.getIndex(this.scene.key);
+    const nextScene = this.scene.manager.getAt(sceneIndex + 1);
+    nextScene.scene.start(nextScene.scene.key);
   }
-
 }

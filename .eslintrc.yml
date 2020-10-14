@@ -14,4 +14,5 @@ rules:
     class-methods-use-this: 0,
     no-multi-assign: 0,
     import/prefer-default-export: 0,
+    new-cap: 0,
   }

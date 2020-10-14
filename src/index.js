@@ -1,20 +1,19 @@
 import Phaser from "phaser";
 import Game from "./core/Game";
-import mapConfig from "./core/config/MapConfig"
+import mapConfig from "./core/config/MapConfig";
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 600;
 
-let scenes = []
-mapConfig.forEach((mc,i) => {
-  let sceneConfig = {
+const scenes = [];
+mapConfig.forEach((mc, i) => {
+  const sceneConfig = {
     active: false,
     visible: false,
     key: mc.gameMap.levelName,
-  }
+  };
   scenes.push(new Game(sceneConfig, i));
-})
-
+});
 
 const gameConfig = {
   title: "The People",
@@ -33,7 +32,7 @@ const gameConfig = {
     default: "arcade",
     arcade: {
       gravity: { y: 0 },
-      debug: true,
+      debug: false,
     },
   },
   backgroundColor: "#000",
