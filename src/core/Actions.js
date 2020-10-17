@@ -1,5 +1,6 @@
-import Phaser from 'phaser'
+import Phaser from "phaser";
 import CONFIG from "./config/Config";
+
 export default class Actions {
   constructor(player) {
     this.player = player;
@@ -35,23 +36,24 @@ export default class Actions {
   update(delta) {
     if (this.isMoving()) {
       this.updatePlayerPosition(delta);
-      this.stopMoving()
+      this.stopMoving();
     }
-    
   }
 
-  setSpeed(speed){
+  setSpeed(speed) {
     this.speedPixelsPerSecond = speed;
   }
 
-  updatePlayerPosition(delta){
-    const deltaSpeed = this.getDeltaSpeed(delta)
+  updatePlayerPosition(delta) {
+    const deltaSpeed = this.getDeltaSpeed(delta);
     this.movePlayerSprite(deltaSpeed);
   }
-  getDeltaSpeed(delta){
-    const deltaInSeconds = delta / 1000
-    return this.speedPixelsPerSecond * deltaInSeconds
+
+  getDeltaSpeed(delta) {
+    const deltaInSeconds = delta / 1000;
+    return this.speedPixelsPerSecond * deltaInSeconds;
   }
+
   movePlayerSprite(speed) {
     const newPlayerPos = this.player
       .getPosition()
@@ -64,5 +66,4 @@ export default class Actions {
       .clone()
       .multiply(new Phaser.Math.Vector2(speed));
   }
-
 }

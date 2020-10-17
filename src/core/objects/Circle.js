@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+
 export default class Circle extends Phaser.GameObjects.Ellipse {
   constructor(scene, x, y, size) {
     super(scene, x, y, size, size, 0x0000ff, 0.8);
@@ -14,7 +15,7 @@ export default class Circle extends Phaser.GameObjects.Ellipse {
   rotateShape(direction) {
     switch (direction) {
       case "DOWN":
-        //this.rotation = Phaser.Math.DegToRad(180);
+        // this.rotation = Phaser.Math.DegToRad(180);
         this.setRotation(Phaser.Math.DegToRad(180));
 
         break;
@@ -22,12 +23,14 @@ export default class Circle extends Phaser.GameObjects.Ellipse {
         this.rotation = Phaser.Math.DegToRad(0);
         break;
       case "LEFT":
-        //this.rotation = Phaser.Math.DegToRad(-90);
+        // this.rotation = Phaser.Math.DegToRad(-90);
         this.setRotation(Phaser.Math.DegToRad(-90));
 
         break;
       case "RIGHT":
         this.rotation = Phaser.Math.DegToRad(90);
+        break;
+      default:
         break;
     }
   }

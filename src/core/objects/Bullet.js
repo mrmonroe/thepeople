@@ -1,10 +1,12 @@
+import Phaser from "phaser";
 import CONFIG from "../config/Config";
+
 export default class Bullet extends Phaser.GameObjects.Ellipse {
   constructor(scene, x, y) {
     super(scene, x, y, 4, 4, 0xff0000);
     scene.physics.add.existing(this);
     scene.add.existing(this);
-   //  this.body.collideWorldBounds = true;
+    //  this.body.collideWorldBounds = true;
     this.body.setCircle(4, -1, -1);
     this.movementDirection = CONFIG.DIRECTION.NONE;
     this.speed = 200;
@@ -17,22 +19,20 @@ export default class Bullet extends Phaser.GameObjects.Ellipse {
   }
 
   fireBullet(direction) {
-     
     const vel = this.getDirection(direction, this.speed);
     this.body.setVelocity(vel.x, vel.y);
-    this.collideDestroy()
+    this.collideDestroy();
   }
 
   getDirection(direction, speed) {
-      
     return this.movementDirectionVectors[direction]
       .clone()
       .multiply(new Phaser.Math.Vector2(speed));
   }
 
-  collideDestroy(){
-      if(this.body.checkWorldBounds()){
-          this.destroy()
-      }
+  collideDestroy() {
+    if (this.body.checkWorldBounds()) {
+      this.destroy();
+    }
   }
 }

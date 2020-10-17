@@ -1,5 +1,7 @@
+import Phaser from "phaser";
 import Bullet from "./objects/Bullet";
 import Circle from "./objects/Circle";
+
 export default class Player {
   constructor(scene, name, startX, startY) {
     this.scene = scene;

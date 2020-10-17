@@ -3,18 +3,14 @@ import Phaser from "phaser";
 export default class Scene1 extends Phaser.Scene {
   constructor() {
     super("bootGame");
-
   }
 
-  preload() {
-    
-  }
+  preload() {}
 
   create() {
-    this.add.text(10,10,"Loading game...");
+    this.add.text(10, 10, "Loading game...");
     this.scene.start("playGame");
   }
 
-  update(_time, delta) {
-  }
+  update() {}
 }
