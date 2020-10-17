@@ -1,28 +1,24 @@
 import Phaser from "phaser";
-import Game from "./core/Game";
-import mapConfig from "./core/config/MapConfig";
+import Scene1 from "./core/scenes/Scene1";
+import Scene2 from "./core/scenes/Scene2";
+
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 600;
 
-const scenes = [];
-mapConfig.forEach((mc, i) => {
-  const sceneConfig = {
-    active: false,
-    visible: false,
-    key: mc.gameMap.levelName,
-  };
-  scenes.push(new Game(sceneConfig, i));
-});
-
 const gameConfig = {
-  title: "The People",
+  title: "The Void",
   render: {
-    antialias: false,
+    antialias: true,
+    
   },
+  
   type: Phaser.AUTO,
   parent: "game",
-  scene: scenes,
+  scene: [
+    Scene1,
+    Scene2
+  ],
   scale: {
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT,
@@ -35,7 +31,7 @@ const gameConfig = {
       debug: false,
     },
   },
-  backgroundColor: "#000",
+  backgroundColor: "#000000",
 };
 
-export const game = new Phaser.Game(gameConfig);
+const game = new Phaser.Game(gameConfig);

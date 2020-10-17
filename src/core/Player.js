@@ -1,105 +1,40 @@
-import Phaser from "phaser";
-import config from "./config/Config";
-
+import Bullet from "./objects/Bullet";
+import Circle from "./objects/Circle";
 export default class Player {
-  constructor(sprite, cIndex, xPos, yPos, scene) {
-    this.characterIndex = cIndex;
-    this.startTilePosX = xPos;
-    this.startTilePosY = yPos;
-    this.sprite = sprite;
+  constructor(scene, name, startX, startY) {
     this.scene = scene;
-    this.sprite.scale = this.scaleFactor = 1.5;
-    this.lastFootLeft = false;
-    this.frameRow = {
-      leftFoot: 0,
-      standing: 0,
-      rightFoot: 0,
-    };
-
-    this.directionToFrameRow = {
-      [config.DIRECTION.DOWN]: 0,
-      [config.DIRECTION.LEFT]: 1,
-      [config.DIRECTION.RIGHT]: 2,
-      [config.DIRECTION.UP]: 3,
-    };
-    const xP = this.startTilePosX * config.TILE_SIZE + this.playerOffsetX();
-    const yP = this.startTilePosY * config.TILE_SIZE + this.playerOffsetY();
-    this.sprite.setPosition(xP, yP);
-    this.sprite.setFrame(
-      this.framesOfDirection(config.DIRECTION.DOWN).standing
-    );
+    this.body = new Circle(scene, startX, startY, 15);
+    this.name = name;
+    this.health = 100;
+    this.isAlive = true;
   }
 
-  getTilePos() {
-    const x =
-      (this.sprite.getCenter().x - this.playerOffsetX()) / config.TILE_SIZE;
-    const y =
-      (this.sprite.getCenter().y - this.playerOffsetY()) / config.TILE_SIZE;
-    return new Phaser.Math.Vector2(Math.floor(x), Math.floor(y));
+  reduceHealth(num) {
+    this.health -= num;
   }
 
-  setPosition(x, y) {
-    this.sprite.setPosition(x, y);
+  addHealth(num) {
+    this.health += num;
+  }
+
+  maxHealth() {
+    this.health = 100;
   }
 
   getPosition() {
-    return this.sprite.getCenter();
+    return new Phaser.Math.Vector2(this.body.x, this.body.y);
   }
 
-  playerOffsetX() {
-    return config.TILE_SIZE / 2;
+  setPosition(x, y) {
+    this.body.setPosition(x, y);
   }
 
-  playerOffsetY() {
-    return (
-      -((config.PLAYER_FRAME_HEIGHT * this.scaleFactor) % config.TILE_SIZE) / 2
+  fireBullet(direction) {
+    const bullet = new Bullet(
+      this.scene,
+      this.getPosition().x,
+      this.getPosition().y
     );
-  }
-
-  setWalkingFrame(direction) {
-    this.frameRow = this.framesOfDirection(direction);
-    this.sprite.setFrame(
-      this.lastFootLeft ? this.frameRow.rightFoot : this.frameRow.leftFoot
-    );
-  }
-
-  setStandingFrame(direction) {
-    if (this.isCurrentFrameStanding(direction)) {
-      this.lastFootLeft = !this.lastFootLeft;
-    }
-    this.sprite.setFrame(this.framesOfDirection(direction).standing);
-  }
-
-  isCurrentFrameStanding(direction) {
-    return (
-      this.sprite.frame.name !== this.framesOfDirection(direction).standing
-    );
-  }
-
-  framesOfDirection(direction) {
-    const playerRow = Math.floor(this.characterIndex / config.CHARS_IN_ROW);
-    const playerCol = this.characterIndex % config.CHARS_IN_ROW;
-    const framesInRow = config.CHARS_IN_ROW * config.FRAMES_PER_CHAR_ROW;
-    const framesInSameRowBefore = config.FRAMES_PER_CHAR_ROW * playerCol;
-    const rows =
-      this.directionToFrameRow[direction] +
-      playerRow * config.FRAMES_PER_CHAR_COL;
-    const startFrame = framesInSameRowBefore + rows * framesInRow;
-    return {
-      leftFoot: startFrame,
-      standing: startFrame + 1,
-      rightFoot: startFrame + 2,
-    };
-  }
-
-  hasWonTheScene() {
-    this.goToNextScene();
-  }
-
-  goToNextScene() {
-    this.scene.manager.stop(this.scene.key);
-    const sceneIndex = this.scene.manager.getIndex(this.scene.key);
-    const nextScene = this.scene.manager.getAt(sceneIndex + 1);
-    nextScene.scene.start(nextScene.scene.key);
+    bullet.fireBullet(direction);
   }
 }
